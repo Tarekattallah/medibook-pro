@@ -1,259 +1,274 @@
 # 🏥 MediBook Pro
 
-> منصة حجز مواعيد أطباء — Full-Stack Web Application
+> A full-stack medical appointment booking platform built with React, Node.js, and MongoDB.
 
-![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)
-![Vercel](https://img.shields.io/badge/Deploy-Vercel-000000?logo=vercel&logoColor=white)
-
----
-
-## 📋 نظرة عامة
-
-MediBook Pro هو تطبيق ويب متكامل لحجز مواعيد الأطباء. يتيح للمرضى البحث عن الأطباء وحجز مواعيد، وللأطباء إدارة جداولهم، وللمدراء الإشراف على المنصة بالكامل.
-
-**Live Demo:** [medibook-app.vercel.app](https://medibook-app.vercel.app) *(بعد الـ deploy)*
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)](https://react.dev)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)](https://nodejs.org)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
+[![Express](https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white)](https://expressjs.com)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
+[![Deploy](https://img.shields.io/badge/Deploy-Vercel-000000?logo=vercel&logoColor=white)](https://vercel.com)
 
 ---
 
-## ✨ المميزات
+## 📋 Overview
 
-### 👤 للمرضى
-- البحث عن الأطباء بالتخصص والسعر والتقييم
-- عرض ملف الطبيب الكامل مع المراجعات
-- حجز مواعيد وإلغاؤها
-- عرض السجلات الطبية
-- استقبال الإشعارات
+MediBook Pro is a full-stack web application that streamlines the process of booking medical appointments. Patients can discover and book doctors, doctors can manage their schedules and patient data, and admins have full oversight of the platform through a dedicated dashboard.
 
-### 🩺 للأطباء
-- لوحة تحكم بالمواعيد القادمة
-- إدارة الجدول الزمني والإتاحة
-- استكمال الملف المهني (Onboarding)
-- تتبع المواعيد والمرضى
-
-### 🔧 للمدراء
-- لوحة إحصائيات شاملة
-- إدارة المستخدمين (تفعيل/تعطيل/تغيير الصلاحيات)
-- توثيق الأطباء
-- تقارير تحليلية شهرية
+**Live Demo:** [medibook-app.vercel.app](https://medibook-app.vercel.app)
 
 ---
 
-## 🗂️ هيكل المشروع
+## ✨ Features
+
+### 👤 Patients
+- Search for doctors by specialty, price range, and rating
+- View detailed doctor profiles with reviews and availability
+- Book, reschedule, and cancel appointments
+- Access personal medical records
+- Receive real-time notifications
+
+### 🩺 Doctors
+- Dashboard with upcoming appointments at a glance
+- Manage weekly schedule and time-slot availability
+- Complete a guided professional onboarding flow
+- Track patient history and appointment status
+
+### 🔧 Administrators
+- Platform-wide statistics and analytics dashboard
+- User management — activate, deactivate, and assign roles
+- Doctor verification workflow
+- Monthly analytics reports
+
+---
+
+## 🗂️ Project Structure
 
 ```
 medibook-pro/
-├── medibook-app/          # Frontend — React + Vite
+├── medibook-app/               # Frontend — React + Vite
 │   ├── src/
 │   │   ├── pages/
-│   │   │   ├── public/    # Landing, Login, Register, Search, BookingPage
-│   │   │   ├── patient/   # Dashboard, Appointments, MedicalRecords, Profile
-│   │   │   ├── doctor/    # Dashboard, Schedule, Onboarding
-│   │   │   └── admin/     # Dashboard, Users, Analytics, Appointments
-│   │   ├── components/    # Navbar, Sidebar, DoctorCard, Toast
-│   │   └── context/       # AuthContext
+│   │   │   ├── public/         # Landing, Login, Register, Search, Booking
+│   │   │   ├── patient/        # Dashboard, Appointments, Medical Records, Profile
+│   │   │   ├── doctor/         # Dashboard, Schedule, Onboarding
+│   │   │   └── admin/          # Dashboard, Users, Analytics, Appointments
+│   │   ├── components/
+│   │   │   ├── layout/         # Navbar, AdminSidebar
+│   │   │   └── ui/             # DoctorCard, Toast
+│   │   └── context/            # AuthContext (JWT-based auth state)
 │   ├── vercel.json
 │   └── .env.example
 │
-└── medibook-backend/      # Backend — Node.js + Express + MongoDB
+└── medibook-backend/           # Backend — Node.js + Express + MongoDB
     ├── src/
-    │   ├── controllers/   # auth, doctor, appointment, admin, notification, medicalRecord
-    │   ├── models/        # User, Appointment, MedicalRecord, Notification, Review
-    │   ├── routes/        # auth, doctors, appointments, admin, notifications, medicalRecords
-    │   ├── middleware/    # auth (JWT)
-    │   ├── config/        # db, multer, seed
-    │   └── index.js
+    │   ├── controllers/        # auth, doctor, appointment, admin, notification, medicalRecord
+    │   ├── models/             # User, Appointment, MedicalRecord, Notification, Review
+    │   ├── routes/             # Modular Express routers
+    │   ├── middleware/         # JWT authentication guard
+    │   └── config/             # Database connection, Multer, seed script
     ├── vercel.json
     └── .env.example
 ```
 
 ---
 
-## 🛣️ الـ Routes
+## 🛣️ Routes Reference
 
-### Frontend Routes
+### Frontend
 
-| Route | الصفحة | الصلاحية |
-|-------|---------|----------|
-| `/` | Landing Page | الكل |
-| `/search` | البحث عن أطباء | الكل |
-| `/doctor/:id` | ملف الطبيب | الكل |
-| `/book/:id` | حجز موعد | مريض |
-| `/login` | تسجيل الدخول | الكل |
-| `/register` | إنشاء حساب | الكل |
-| `/patient/dashboard` | لوحة المريض | مريض |
-| `/patient/appointments` | مواعيدي | مريض |
-| `/patient/records` | السجلات الطبية | مريض |
-| `/patient/settings` | إعدادات الملف | مريض |
-| `/doctor/dashboard` | لوحة الطبيب | طبيب |
-| `/doctor/schedule` | إدارة الجدول | طبيب |
-| `/admin` | لوحة الأدمن | أدمن |
-| `/admin/users` | إدارة المستخدمين | أدمن |
-| `/admin/analytics` | التحليلات | أدمن |
-| `/admin/appointments` | إدارة المواعيد | أدمن |
+| Route | Page | Access |
+|-------|------|--------|
+| `/` | Landing Page | Public |
+| `/search` | Doctor Search | Public |
+| `/doctor/:id` | Doctor Profile | Public |
+| `/book/:id` | Booking Confirmation | Patient |
+| `/booking-success` | Booking Success | Patient |
+| `/login` | Login | Public |
+| `/register` | Register | Public |
+| `/patient/dashboard` | Patient Dashboard | Patient |
+| `/patient/appointments` | My Appointments | Patient |
+| `/patient/records` | Medical Records | Patient |
+| `/patient/settings` | Profile Settings | Patient |
+| `/doctor/dashboard` | Doctor Dashboard | Doctor |
+| `/doctor/schedule` | Schedule Manager | Doctor |
+| `/doctor/onboarding` | Profile Setup | Doctor |
+| `/admin` | Admin Dashboard | Admin |
+| `/admin/users` | User Management | Admin |
+| `/admin/analytics` | Analytics | Admin |
+| `/admin/appointments` | All Appointments | Admin |
+| `/notifications` | Notifications | Authenticated |
 
-### Backend API Endpoints
+### Backend API
 
 ```
+# Authentication
 POST   /api/auth/register
 POST   /api/auth/login
 GET    /api/auth/me
 PATCH  /api/auth/update-profile
 
+# Doctors
 GET    /api/doctors/search?q=&specialty=&maxPrice=&minRating=
 GET    /api/doctors/:id
 GET    /api/doctors/:id/availability?date=YYYY-MM-DD
 POST   /api/doctors/:id/reviews
-PATCH  /api/doctors/:id/verify        (Admin)
+PATCH  /api/doctors/:id/verify                    — Admin only
 
+# Appointments
 POST   /api/appointments
-GET    /api/appointments/my           (Patient)
-GET    /api/appointments/doctor       (Doctor)
+GET    /api/appointments/my                       — Patient
+GET    /api/appointments/doctor                   — Doctor
 PATCH  /api/appointments/:id/cancel
-PATCH  /api/appointments/:id/complete (Doctor)
+PATCH  /api/appointments/:id/complete             — Doctor only
 
+# Admin
 GET    /api/admin/stats
 GET    /api/admin/analytics
 GET    /api/admin/users
 PATCH  /api/admin/users/:id/toggle-active
 PATCH  /api/admin/users/:id/role
 
+# Notifications
 GET    /api/notifications
 PATCH  /api/notifications/:id/read
 
+# Medical Records
 GET    /api/medical-records
 POST   /api/medical-records
 ```
 
 ---
 
-## 🚀 التشغيل المحلي
+## 🚀 Getting Started (Local Development)
 
-### المتطلبات
+### Prerequisites
 - Node.js 18+
-- حساب على [MongoDB Atlas](https://cloud.mongodb.com) (مجاني)
+- A free [MongoDB Atlas](https://cloud.mongodb.com) account
 
-### 1. Backend
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Tarekattallah/medibook-pro.git
+cd medibook-pro
+```
+
+### 2. Set up the Backend
 
 ```bash
 cd medibook-backend
 npm install
-cp .env.example .env
-# عدّل الـ .env بقيم حقيقية
-npm run seed    # تعبئة بيانات تجريبية (أول مرة فقط)
-npm run dev     # يشتغل على http://localhost:5000
+cp .env.example .env       # Fill in your values (see below)
+npm run seed               # Seed demo data (first time only)
+npm run dev                # Runs on http://localhost:5000
 ```
 
-### 2. Frontend
+### 3. Set up the Frontend
 
 ```bash
-cd medibook-app
+cd ../medibook-app
 npm install
-cp .env.example .env
-# VITE_API_URL=http://localhost:5000
-npm run dev     # يشتغل على http://localhost:3000
+cp .env.example .env       # Set VITE_API_URL=http://localhost:5000
+npm run dev                # Runs on http://localhost:3000
 ```
 
-### متغيرات البيئة
+### Environment Variables
 
-**medibook-backend/.env**
+**`medibook-backend/.env`**
 ```env
 PORT=5000
 MONGODB_URI=mongodb+srv://USER:PASS@cluster0.xxxxx.mongodb.net/medibook
-JWT_SECRET=your_long_random_secret_min_32_chars
+JWT_SECRET=your_long_random_secret_minimum_32_characters
 JWT_EXPIRES_IN=7d
 NODE_ENV=development
 FRONTEND_URL=http://localhost:3000
 ```
 
-**medibook-app/.env**
+**`medibook-app/.env`**
 ```env
 VITE_API_URL=http://localhost:5000
 ```
 
-### حسابات تجريبية (بعد الـ Seed)
+### Demo Accounts (after seeding)
 
-| الدور | البريد | كلمة المرور |
-|-------|--------|-------------|
-| أدمن | admin@demo.com | password |
-| مريض | patient@demo.com | password |
-| طبيب | doctor@demo.com | password |
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@demo.com | password |
+| Patient | patient@demo.com | password |
+| Doctor | doctor@demo.com | password |
 
 ---
 
-## ☁️ الـ Deploy على Vercel
+## ☁️ Deploying to Vercel
 
-### الخطوة 1: MongoDB Atlas
+### Step 1 — Set up MongoDB Atlas
 
-1. اذهب إلى [cloud.mongodb.com](https://cloud.mongodb.com) وأنشئ حساباً مجانياً
-2. أنشئ Cluster مجاني (M0)
-3. في **Security** أضف مستخدم بصلاحيات Read/Write
-4. في **Network Access** أضف `0.0.0.0/0` (Allow from Anywhere)
-5. انسخ الـ Connection String
+1. Go to [cloud.mongodb.com](https://cloud.mongodb.com) and create a free account
+2. Create a free **M0** cluster
+3. Under **Security → Database Access**, create a user with Read/Write permissions
+4. Under **Security → Network Access**, add `0.0.0.0/0` to allow connections from anywhere
+5. Click **Connect → Drivers** and copy your connection string
 
-### الخطوة 2: Deploy Backend
+### Step 2 — Deploy the Backend
 
-1. ادخل [vercel.com](https://vercel.com) وسجّل بحساب GitHub
-2. اضغط **Add New Project** → ارفع مجلد `medibook-backend`
-3. أضف متغيرات البيئة التالية:
+1. Go to [vercel.com](https://vercel.com) and sign in with GitHub
+2. Click **Add New Project** and import `medibook-pro`
+3. Set the **Root Directory** to `medibook-backend`
+4. Add the following environment variables:
 
 | Key | Value |
 |-----|-------|
-| `MONGODB_URI` | Connection string من Atlas |
-| `JWT_SECRET` | نص عشوائي طويل (32+ حرف) |
+| `MONGODB_URI` | Your Atlas connection string |
+| `JWT_SECRET` | A random string, 32+ characters |
 | `JWT_EXPIRES_IN` | `7d` |
 | `NODE_ENV` | `production` |
-| `FRONTEND_URL` | *(هتضيفه بعدين)* |
+| `FRONTEND_URL` | *(add after deploying the frontend)* |
 
-4. اضغط **Deploy** واحتفظ برابط الـ Backend
+5. Click **Deploy** and save the backend URL (e.g. `https://medibook-backend.vercel.app`)
 
-### الخطوة 3: Seed الـ Database
+### Step 3 — Seed the Database
 
-افتح في المتصفح بعد الـ Deploy:
+Open the following URL in your browser after the backend is live:
+
 ```
 https://your-backend.vercel.app/api/setup-admin
 ```
 
-### الخطوة 4: Deploy Frontend
+### Step 4 — Deploy the Frontend
 
-1. اضغط **Add New Project** → ارفع مجلد `medibook-app`
-2. أضف متغير البيئة:
+1. Click **Add New Project** again and import `medibook-pro`
+2. Set the **Root Directory** to `medibook-app`
+3. Add the environment variable:
 
 | Key | Value |
 |-----|-------|
-| `VITE_API_URL` | رابط الـ Backend من الخطوة 2 |
+| `VITE_API_URL` | Your backend URL from Step 2 |
 
-3. اضغط **Deploy** واحتفظ برابط الـ Frontend
+4. Click **Deploy** and save the frontend URL
 
-### الخطوة 5: ربط الـ Frontend بالـ Backend
+### Step 5 — Connect Frontend & Backend
 
-1. ارجع لمشروع الـ Backend في Vercel
-2. **Settings → Environment Variables**
-3. عدّل `FRONTEND_URL` وضع رابط الـ Frontend
-4. اضغط **Redeploy**
-
----
-
-## 🛠️ التقنيات المستخدمة
-
-### Frontend
-- **React 18** — UI Library
-- **React Router v6** — Client-side routing
-- **Vite** — Build tool
-- **CSS** — Custom styling
-
-### Backend
-- **Node.js + Express** — API server
-- **MongoDB + Mongoose** — Database
-- **JWT** — Authentication
-- **bcryptjs** — Password hashing
-- **Helmet + CORS** — Security
-- **express-rate-limit** — Rate limiting
-- **Multer** — File uploads
+1. Go back to the backend project in Vercel
+2. Navigate to **Settings → Environment Variables**
+3. Update `FRONTEND_URL` with your frontend URL
+4. Click **Redeploy**
 
 ---
 
-## 📄 الرخصة
+## 🛠️ Tech Stack
 
-MIT License — يمكن استخدامه وتعديله بحرية.
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18, React Router v6, Vite 5 |
+| Backend | Node.js, Express 4 |
+| Database | MongoDB Atlas, Mongoose |
+| Auth | JWT, bcryptjs |
+| Security | Helmet, CORS, express-rate-limit |
+| File Uploads | Multer |
+| Deployment | Vercel |
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE) — free to use, modify, and distribute.
