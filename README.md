@@ -15,7 +15,7 @@
 
 MediBook Pro is a full-stack web application that streamlines the process of booking medical appointments. Patients can discover and book doctors, doctors can manage their schedules and patient data, and admins have full oversight of the platform through a dedicated dashboard.
 
-**Live Demo:** [medibook-app.vercel.app](https://medibook-app.vercel.app)
+**Live Demo:** [medibook-app.vercel.app](https://medibook-app-rouge.vercel.app/)
 
 ---
 
