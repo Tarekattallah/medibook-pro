@@ -1,0 +1,438 @@
+/* DoctorEditProfilePage.module.css */
+
+/* ── Page Layout ─────────────────────────────────────────────────── */
+.pageWrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+}
+
+.pageHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.backBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 0;
+    transition: color 0.15s;
+    white-space: nowrap;
+    margin-top: 4px;
+}
+
+.backBtn:hover {
+    color: #0ea5e9;
+}
+
+.pageTitle {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0b1c30;
+    letter-spacing: -0.02em;
+    margin: 0 0 4px;
+}
+
+.pageSub {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* ── Two-column layout ───────────────────────────────────────────── */
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 860px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.leftCol,
+.rightCol {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ── Section card ────────────────────────────────────────────────── */
+.section {
+    padding: 24px;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.sectionTitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0b1c30;
+    margin: 0 0 16px;
+}
+
+.sectionHeader .sectionTitle {
+    margin-bottom: 0;
+}
+
+/* ── Avatar ──────────────────────────────────────────────────────── */
+.avatarSection {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.avatarPreviewWrap {
+    position: relative;
+    width: 88px;
+    height: 88px;
+    flex-shrink: 0;
+}
+
+.avatarPreview {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #e2e8f0;
+}
+
+.avatarInitials {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0ea5e9, #006591);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 2px;
+}
+
+.avatarOverlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatarActions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.avatarHint {
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ── Form grid ───────────────────────────────────────────────────── */
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .formGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Field ───────────────────────────────────────────────────────── */
+.fieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.fieldLabel {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.charCount {
+    font-size: 12px;
+    font-weight: 400;
+    color: #94a3b8;
+}
+
+.input {
+    height: 40px;
+    padding: 0 12px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #0b1c30;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+}
+
+.input:focus {
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+.input::placeholder {
+    color: #94a3b8;
+}
+
+.inputError {
+    border-color: #ef4444 !important;
+}
+
+.inputError:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+.textarea {
+    padding: 10px 12px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #0b1c30;
+    background: #fff;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.15s;
+    font-family: inherit;
+    width: 100%;
+    min-height: 100px;
+}
+
+.textarea:focus {
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+.textarea::placeholder {
+    color: #94a3b8;
+}
+
+.fieldError {
+    font-size: 12px;
+    color: #ef4444;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.fieldHint {
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 0;
+}
+
+/* ── Tag input ───────────────────────────────────────────────────── */
+.tagRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 24px;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #f0f9ff;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+    border-radius: 20px;
+    padding: 3px 10px 3px 12px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.tagRemove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #0369a1;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0 0 0 2px;
+    display: flex;
+    align-items: center;
+    opacity: 0.7;
+    transition: opacity 0.15s;
+}
+
+.tagRemove:hover {
+    opacity: 1;
+}
+
+.tagInputRow {
+    display: flex;
+    gap: 8px;
+}
+
+.tagInputRow .input {
+    flex: 1;
+}
+
+/* ── Education item ──────────────────────────────────────────────── */
+.eduItem {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+    background: #f8fafc;
+}
+
+.eduItemHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.eduItemTitle {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    flex: 1;
+}
+
+.eduFields {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ── Remove button ───────────────────────────────────────────────── */
+.removeBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ef4444;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    border-radius: 6px;
+    transition: background 0.15s;
+    opacity: 0.7;
+}
+
+.removeBtn:hover {
+    background: #fee2e2;
+    opacity: 1;
+}
+
+/* ── Availability ────────────────────────────────────────────────── */
+.availRow {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    background: #f8fafc;
+}
+
+.availDayHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.availDayName {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0b1c30;
+}
+
+.availSlots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.slotBtn {
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1.5px solid #e2e8f0;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.slotBtn:hover {
+    border-color: #0ea5e9;
+    color: #0ea5e9;
+}
+
+.slotActive {
+    background: #0ea5e9;
+    border-color: #0ea5e9;
+    color: #fff;
+}
+
+.slotActive:hover {
+    background: #0284c7;
+    border-color: #0284c7;
+    color: #fff;
+}
+
+/* ── Empty state ─────────────────────────────────────────────────── */
+.emptyText {
+    font-size: 14px;
+    color: #94a3b8;
+    text-align: center;
+    padding: 20px 0;
+    margin: 0;
+}
+
+/* ── Save bar ────────────────────────────────────────────────────── */
+.saveWrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.saveBtn {
+    width: 100%;
+    height: 46px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}

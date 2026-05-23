@@ -1,0 +1,778 @@
+/* ═══════════════════════════════
+   PAGE LAYOUT
+═══════════════════════════════ */
+.loadingWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.pageWrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rightCol {
+  position: sticky;
+  top: 80px;
+}
+
+/* ═══════════════════════════════
+   HEADER CARD
+═══════════════════════════════ */
+.headerCard {
+  padding: 28px !important;
+}
+
+.headerRow {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* Avatar */
+.avatarWrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatarImg {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e0f2fe;
+  display: block;
+}
+
+.avatarInitials {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #bae6fd, #0ea5e9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.verifiedBadge {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #0ea5e9;
+  border: 2px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Info */
+.headerInfo {
+  flex: 1;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.doctorName {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0b1c30;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.verifiedTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #eff6ff;
+  color: #006591;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.specialty {
+  font-size: 16px;
+  color: #0ea5e9;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+.locationRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 14px;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ratingChip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ratingVal {
+  font-weight: 700;
+  font-size: 14px;
+  color: #0b1c30;
+}
+
+.ratingCount {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.expChip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.langTag {
+  background: #f0fdf4;
+  color: #006c49;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ═══════════════════════════════
+   TABS
+═══════════════════════════════ */
+.tabsCard {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.tabsBar {
+  display: flex;
+  border-bottom: 1.5px solid #e2e8f0;
+  padding: 0 24px;
+}
+
+.tabBtn {
+  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  background: none;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  margin-bottom: -1.5px;
+}
+
+.tabBtn:hover {
+  color: #0ea5e9;
+}
+
+.tabActive {
+  color: #006591;
+  border-bottom-color: #006591;
+}
+
+.tabContent {
+  padding: 24px;
+}
+
+.tabPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ═══════════════════════════════
+   SECTIONS (inside tabs)
+═══════════════════════════════ */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0b1c30;
+  margin: 0;
+}
+
+.subTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0b1c30;
+  margin: 0;
+}
+
+.bioText {
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.specTag {
+  background: #e0f2fe;
+  color: #0284c7;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
+}
+
+.conditionsList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.conditionItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #475569;
+}
+
+/* Education */
+.eduList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.eduItem {
+  display: flex;
+  gap: 16px;
+}
+
+.eduIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #f0f9ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.eduDegree {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0b1c30;
+  margin: 0 0 2px;
+}
+
+.eduInstitution {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 4px;
+}
+
+.eduYear {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+.emptyText {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+/* ═══════════════════════════════
+   REVIEWS
+═══════════════════════════════ */
+.reviewsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.reviewsSummary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f0f9ff;
+  border-radius: 12px;
+  padding: 10px 16px;
+}
+
+.avgScore {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0b1c30;
+}
+
+.avgStars {
+  display: flex;
+  gap: 2px;
+}
+
+.reviewItem {
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.reviewItem:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.reviewTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.reviewAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e0f2fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  color: #0284c7;
+  flex-shrink: 0;
+}
+
+.reviewMeta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reviewPatient {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0b1c30;
+}
+
+.reviewDate {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.reviewStars {
+  color: #f59e0b;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.reviewComment {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.6;
+  padding-left: 46px;
+  font-style: italic;
+  margin: 0;
+}
+
+.emptyReviews {
+  text-align: center;
+  padding: 24px 0;
+  color: #94a3b8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+/* Review Form */
+.reviewForm {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.reviewFormTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0b1c30;
+  margin: 0 0 14px;
+}
+
+.starPicker {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.starBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 28px;
+  padding: 0 2px;
+  line-height: 1;
+  transition: color 0.1s;
+}
+
+.ratingLabel {
+  font-size: 13px;
+  color: #64748b;
+  margin-left: 8px;
+}
+
+.reviewTextarea {
+  width: 100%;
+  height: 88px;
+  padding: 10px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.reviewTextarea:focus {
+  border-color: #0ea5e9;
+}
+
+.reviewFormFooter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+/* ═══════════════════════════════
+   BOOKING WIDGET
+═══════════════════════════════ */
+.bookingCard {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.bookingHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: #f0f9ff;
+  border-bottom: 1.5px solid #e0f2fe;
+}
+
+.bookingTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0b1c30;
+  margin: 0;
+}
+
+.feeWrap {
+  text-align: right;
+}
+
+.feeLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin: 0 0 2px;
+}
+
+.feeValue {
+  font-size: 22px;
+  font-weight: 800;
+  color: #006591;
+  font-family: 'JetBrains Mono', monospace;
+  margin: 0;
+}
+
+.bookingBody {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Visit toggle */
+.visitToggle {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1.5px solid #e2e8f0;
+}
+
+.visitBtn {
+  flex: 1;
+  padding: 10px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background: #fff;
+  color: #64748b;
+  transition: all 0.15s;
+}
+
+.visitBtnActive {
+  background: #0ea5e9;
+  color: #fff;
+}
+
+/* Widget label */
+.widgetLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin: 0 0 10px;
+}
+
+/* Day picker */
+.dayPicker {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.dayBtn {
+  flex-shrink: 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1.5px solid #e2e8f0;
+  background: #fff;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
+  min-width: 48px;
+}
+
+.dayBtnActive {
+  border-color: #0ea5e9;
+  background: #f0f9ff;
+}
+
+.dayName {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.dayBtnActive .dayName {
+  color: #0ea5e9;
+}
+
+.dayNum {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #374151;
+  margin-top: 2px;
+}
+
+.dayBtnActive .dayNum {
+  color: #0ea5e9;
+}
+
+/* Slots */
+.slotsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.noSlots {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 13px;
+  color: #94a3b8;
+  padding: 12px 0;
+  margin: 0;
+}
+
+.slotBtn {
+  padding: 9px 4px;
+  border-radius: 8px;
+  border: 1.5px solid #e2e8f0;
+  background: #fff;
+  color: #374151;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.slotBtn:hover:not(:disabled) {
+  border-color: #0ea5e9;
+}
+
+.slotActive {
+  background: #0ea5e9;
+  border-color: #0ea5e9;
+  color: #fff;
+}
+
+.slotDisabled {
+  background: #f8fafc;
+  color: #cbd5e1;
+  cursor: not-allowed;
+  border-color: #f1f5f9;
+}
+
+/* Book button */
+.bookBtn {
+  width: 100%;
+  height: 48px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cancellationNote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #94a3b8;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.loginPrompt {
+  background: #f0f9ff;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  font-size: 13px;
+  color: #0284c7;
+}
+
+.loginLink {
+  font-weight: 700;
+  color: #0ea5e9;
+  text-decoration: none;
+}
+
+/* ═══════════════════════════════
+   RESPONSIVE
+═══════════════════════════════ */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .rightCol {
+    position: static;
+  }
+
+  .conditionsList {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .headerRow {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .nameRow {
+    justify-content: center;
+  }
+
+  .locationRow {
+    justify-content: center;
+  }
+
+  .metaRow {
+    justify-content: center;
+  }
+
+  .tabBtn {
+    padding: 14px 12px;
+    font-size: 13px;
+  }
+}

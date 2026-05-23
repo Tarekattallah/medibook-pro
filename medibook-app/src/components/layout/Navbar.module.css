@@ -1,0 +1,387 @@
+/* ── Navbar ───────────────────────────────────────────────────── */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+}
+
+.inner {
+    width: 100%;
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+/* ── Logo ──────────────────────────────────────────────────────── */
+.logoLink {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.logoIcon {
+    width: 34px;
+    height: 34px;
+    background: linear-gradient(135deg, #0ea5e9, #006591);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logoIcon span {
+    color: #fff;
+    font-weight: 800;
+    font-size: 16px;
+}
+
+.logoText {
+    font-weight: 800;
+    font-size: 17px;
+    color: #0b1c30;
+    letter-spacing: -0.03em;
+}
+
+.logoAccent {
+    color: #0ea5e9;
+}
+
+/* ── Desktop Nav Links ──────────────────────────────────────────── */
+.desktopNav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    justify-content: center;
+}
+
+.navLink {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+    color: #475569;
+    background: transparent;
+}
+
+.navLink:hover {
+    color: #0ea5e9;
+}
+
+.navLinkActive {
+    color: #0ea5e9;
+    background: #f0f9ff;
+}
+
+/* ── Right Section ──────────────────────────────────────────────── */
+.rightSection {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+/* ── Search Bar ─────────────────────────────────────────────────── */
+.searchForm {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 12px;
+    color: #94a3b8;
+    font-size: 20px;
+}
+
+.searchInput {
+    width: 200px;
+    height: 36px;
+    padding-left: 40px;
+    padding-right: 12px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.searchInput:focus {
+    border-color: #0ea5e9;
+}
+
+/* ── Icon Buttons ───────────────────────────────────────────────── */
+.iconBtn {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1.5px solid #e2e8f0;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.15s;
+    cursor: pointer;
+    color: #475569;
+    font-size: 20px;
+}
+
+.iconBtn:hover {
+    border-color: #0ea5e9;
+    background: #f0f9ff;
+}
+
+.notificationBadge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ba1a1a;
+    border: 2px solid #fff;
+}
+
+/* ── User Menu ──────────────────────────────────────────────────── */
+.userMenuWrapper {
+    position: relative;
+}
+
+.userMenuButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 4px 4px 12px;
+    border-radius: 10px;
+    border: 1.5px solid #e2e8f0;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.userAvatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #bae6fd, #0ea5e9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.userName {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0b1c30;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chevron {
+    font-size: 16px;
+    color: #94a3b8;
+    transition: transform 0.2s;
+}
+
+.chevronOpen {
+    transform: rotate(180deg);
+}
+
+/* ── Dropdown Menu ───────────────────────────────────────────────── */
+.dropdown {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    background: #fff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12);
+    min-width: 220px;
+    z-index: 200;
+    overflow: hidden;
+}
+
+.dropdownHeader {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.dropdownName {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0b1c30;
+}
+
+.dropdownEmail {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 2px;
+}
+
+.dropdownRole {
+    font-size: 11px;
+    color: #0ea5e9;
+    margin-top: 3px;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+
+.dropdownLink {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    text-decoration: none;
+    transition: background 0.1s;
+}
+
+.dropdownLink:hover {
+    background: #f8fafc;
+}
+
+.dropdownIcon {
+    font-size: 18px;
+    color: #94a3b8;
+}
+
+.dropdownLabel {
+    flex: 1;
+}
+
+.dropdownBadge {
+    background: #0ea5e9;
+    color: #fff;
+    border-radius: 99px;
+    padding: 1px 7px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.logoutButton {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #dc2626;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.1s;
+    border-top: 1px solid #f1f5f9;
+}
+
+.logoutButton:hover {
+    background: #fef2f2;
+}
+
+/* ── Auth Buttons ───────────────────────────────────────────────── */
+.authBtn {
+    font-size: 14px;
+}
+
+/* ── Mobile Menu Toggle ──────────────────────────────────────────── */
+.mobileMenuBtn {
+    display: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1.5px solid #e2e8f0;
+    background: #fff;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    color: #475569;
+}
+
+/* ── Mobile Menu ─────────────────────────────────────────────────── */
+.mobileMenu {
+    border-top: 1px solid #f1f5f9;
+    padding: 12px 24px;
+    background: #fff;
+}
+
+.mobileLink {
+    display: block;
+    padding: 12px 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #374151;
+    text-decoration: none;
+    border-bottom: 1px solid #f8fafc;
+}
+
+.mobileAuthLink {
+    display: block;
+    padding: 12px 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #0ea5e9;
+    text-decoration: none;
+}
+
+.mobileAuthBtn {
+    font-weight: 600;
+}
+
+.mobileDashboardLink {
+    display: block;
+    padding: 12px 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #374151;
+    text-decoration: none;
+    border-bottom: 1px solid #f8fafc;
+}
+
+.mobileLogoutBtn {
+    display: block;
+    padding: 12px 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #dc2626;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .mobileMenuBtn {
+        display: flex !important;
+    }
+
+    .hideMobile {
+        display: none !important;
+    }
+}

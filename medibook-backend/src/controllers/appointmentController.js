@@ -195,3 +195,69 @@ exports.getAllAppointments = async (req, res) => {
     res.json({ status: 'success', total, appointments })
   } catch (err) { res.status(500).json({ message: err.message }) }
 }
+
+// ========== NEW: Dashboard Analytics ==========
+
+// GET /api/appointments/stats/weekly
+exports.getWeeklyStats = async (req, res) => {
+  try {
+    // تحديد بداية الأسبوع الحالي (الاثنين)
+    const now = new Date();
+    const dayOfWeek = now.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - ((dayOfWeek + 6) % 7));
+    monday.setHours(0, 0, 0, 0);
+
+    const startDate = req.query.start ? new Date(req.query.start) : monday;
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 7);
+
+    // تجميع عدد المواعيد المؤكدة والمكتملة لكل يوم
+    const stats = await Appointment.aggregate([
+      {
+        $match: {
+          date: { $gte: startDate, $lt: endDate },
+          status: { $in: ['confirmed', 'completed'] },
+          patient: req.user._id   // يقتصر على المريض الحالي فقط
+        }
+      },
+      {
+        $group: {
+          _id: { $dayOfWeek: "$date" }, // 1=Sun ... 7=Sat
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    // تحويل النتيجة إلى مصفوفة مرتبة بأيام الأسبوع
+    const dayMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const result = dayMap.map((day, index) => {
+      const stat = stats.find(s => s._id === index + 1);
+      return { day, count: stat ? stat.count : 0 };
+    });
+
+    res.json({ status: 'success', stats: result });
+  } catch (err) {
+    console.error('[getWeeklyStats]', err);
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+};
+
+// GET /api/appointments/recent
+exports.getRecentActivity = async (req, res) => {
+  try {
+    const limit = Math.min(parseInt(req.query.limit) || 5, 10); // أقصى حد 10
+
+    const appointments = await Appointment.find({ patient: req.user._id })
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .populate('doctor', 'name')
+      .lean();
+
+    res.json({ status: 'success', activities: appointments });
+  } catch (err) {
+    console.error('[getRecentActivity]', err);
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+};

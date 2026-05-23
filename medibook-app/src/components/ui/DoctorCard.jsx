@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 export default function DoctorCard({ doctor }) {
-  const { _id, name, specialty, location, rating, reviewCount, price, yearsExperience, isVerified, languages } = doctor
+  const { _id, name, specialty, location, rating, reviewCount, price, yearsExperience, isVerified, languages, specializations } = doctor
   const initials = name?.split(' ').filter(w => w.startsWith('Dr') ? false : true).map(w => w[0]).slice(0, 2).join('') || 'DR'
 
   return (
@@ -49,11 +49,20 @@ export default function DoctorCard({ doctor }) {
               {languages.map(l => <span key={l} className="tag" style={{ fontSize: 11 }}>{l}</span>)}
             </div>
           )}
+          {/* ── الإضافة الجديدة: التخصصات الدقيقة ── */}
+          {specializations?.length > 0 && (
+            <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+              {specializations.map(s => (
+                <span key={s} className="tag" style={{ fontSize: 11, background: '#e0f2fe', color: '#0284c7' }}>{s}</span>
+              ))}
+            </div>
+          )}
         </div>
 
         <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
           <Link to={`/doctor/${_id}`} className="btn btn-secondary" style={{ flex: 1, fontSize: 13, padding: '8px 14px' }}>View Profile</Link>
-          <Link to={`/doctor/${_id}`} className="btn btn-primary" style={{ flex: 1, fontSize: 13, padding: '8px 14px' }}>Book Now</Link>        </div>
+          <Link to={`/doctor/${_id}`} className="btn btn-primary" style={{ flex: 1, fontSize: 13, padding: '8px 14px' }}>Book Now</Link>
+        </div>
       </div>
     </div>
   )

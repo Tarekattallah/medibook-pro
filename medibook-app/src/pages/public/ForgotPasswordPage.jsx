@@ -1,85 +1,154 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useToast } from '../../components/ui/Toast'
+import Navbar from '../../components/layout/Navbar'
+import s from './ForgotPasswordPage.module.css'
+
+/* ─── Simple email validator ───────────────────────────────────── */
+const isValidEmail = (val) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) && val.length <= 254
 
 export default function ForgotPasswordPage() {
-  const [email,   setEmail]   = useState('')
-  const [sent,    setSent]    = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [email,    setEmail]    = useState('')
+  const [sent,     setSent]     = useState(false)
+  const [loading,  setLoading]  = useState(false)
+  const [error,    setError]    = useState('')
+  const controllerRef = useRef(null) // AbortController for fetch
   const toast = useToast()
 
-  const handleSubmit = async e => {
+  const handleChange = (e) => {
+    const val = e.target.value
+    setEmail(val)
+    // Live validation after first blur — keep it simple: only validate on submit
+    setError('')
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!email) return
+
+    // Basic validation
+    if (!email.trim()) {
+      setError('Email is required.')
+      return
+    }
+    if (!isValidEmail(email.trim())) {
+      setError('Please enter a valid email address.')
+      return
+    }
+    setError('')
+
     setLoading(true)
+
+    // Abort previous request if any
+    if (controllerRef.current) controllerRef.current.abort()
+    controllerRef.current = new AbortController()
+    const { signal } = controllerRef.current
+
     try {
-      const res  = await fetch('/api/auth/forgot-password', {
-        method:  'POST',
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ email }),
+        body: JSON.stringify({ email: email.trim().toLowerCase() }),
+        signal,
       })
+
       const data = await res.json()
-      if (!res.ok) throw new Error(data.message)
+      if (!res.ok) throw new Error(data.message || 'Something went wrong.')
       setSent(true)
     } catch (err) {
+      if (err.name === 'AbortError') return // silently ignore abort
       toast(err.message || 'Something went wrong. Try again.', 'error')
-    } finally { setLoading(false) }
+    } finally {
+      setLoading(false)
+      controllerRef.current = null
+    }
   }
 
   return (
-    <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'#f8f9ff',padding:24}}>
-      <div style={{width:'100%',maxWidth:420}}>
-        <Link to="/" style={{display:'flex',alignItems:'center',gap:8,textDecoration:'none',justifyContent:'center',marginBottom:36}}>
-          <div style={{width:34,height:34,background:'linear-gradient(135deg,#0ea5e9,#006591)',borderRadius:10,display:'flex',alignItems:'center',justifyContent:'center'}}>
-            <span style={{color:'#fff',fontWeight:800,fontSize:16}}>M</span>
-          </div>
-          <span style={{fontWeight:800,fontSize:17,color:'#0b1c30'}}>MediBook Pro</span>
-        </Link>
+    <>
+      <Navbar />
+      <div className={s.page}>
+        <div className={s.container}>
 
-        <div className="card" style={{padding:36}}>
-          {!sent ? (
-            <>
-              <div style={{width:56,height:56,borderRadius:'50%',background:'#e0f2fe',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 20px'}}>
-                <span className="icon icon-filled" style={{fontSize:28,color:'#0ea5e9'}}>lock_reset</span>
-              </div>
-              <h1 style={{fontSize:22,fontWeight:800,color:'#0b1c30',textAlign:'center',marginBottom:6,letterSpacing:'-0.02em'}}>Forgot your password?</h1>
-              <p style={{fontSize:14,color:'#64748b',textAlign:'center',marginBottom:28,lineHeight:1.6}}>
-                Enter your email and we'll send you a link to reset your password.
-              </p>
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label className="label">Email Address</label>
-                  <input className="input" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com" required/>
+          {/* Logo */}
+          <Link to="/" className={s.logo}>
+            <div className={s.logoIcon}>
+              <span>M</span>
+            </div>
+            <span className={s.logoText}>MediBook Pro</span>
+          </Link>
+
+          <div className={s.card}>
+            {!sent ? (
+              <>
+                <div className={`${s.iconCircle} ${s.iconCircleSmall}`}>
+                  <span className="icon icon-filled">lock_reset</span>
                 </div>
-                <button type="submit" className="btn btn-primary" style={{width:'100%',height:46,fontSize:15}} disabled={loading}>
-                  {loading ? <div className="spinner" style={{width:20,height:20,borderWidth:2}}/> : 'Send Reset Link'}
+                <h1 className={s.heading}>Forgot your password?</h1>
+                <p className={s.subText}>
+                  Enter your email and we'll send you a link to reset your password.
+                </p>
+                <form onSubmit={handleSubmit} noValidate>
+                  <div className="form-group">
+                    <label className="label">Email Address</label>
+                    <input
+                      className="input"
+                      type="email"
+                      value={email}
+                      onChange={handleChange}
+                      placeholder="you@example.com"
+                      required
+                      maxLength={254}
+                      disabled={loading}
+                      aria-invalid={!!error}
+                      aria-describedby={error ? 'email-error' : undefined}
+                    />
+                    {error && (
+                      <span id="email-error" role="alert" style={{ fontSize: 12, color: '#ef4444', marginTop: 4, display: 'block' }}>
+                        {error}
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    type="submit"
+                    className={`btn btn-primary ${s.fullBtn}`}
+                    disabled={loading || !email.trim()}
+                    aria-busy={loading}
+                  >
+                    {loading ? (
+                      <div className="spinner" style={{ width: 20, height: 20, borderWidth: 2 }} />
+                    ) : (
+                      'Send Reset Link'
+                    )}
+                  </button>
+                </form>
+              </>
+            ) : (
+              <>
+                <div className={`${s.iconCircle} ${s.iconCircleLarge}`}>
+                  <span className="icon icon-filled">mark_email_read</span>
+                </div>
+                <h1 className={s.sentHeading}>Check your email</h1>
+                <p className={s.sentText}>
+                  If <strong>{email}</strong> is registered, you'll receive a reset link shortly.
+                </p>
+                <p className={s.spamNote}>
+                  Didn't receive it? Check your spam folder.
+                </p>
+                <button onClick={() => setSent(false)} className={`btn btn-secondary ${s.tryAgainBtn}`}>
+                  Try a different email
                 </button>
-              </form>
-            </>
-          ) : (
-            <>
-              <div style={{width:72,height:72,borderRadius:'50%',background:'#ecfdf5',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 20px'}}>
-                <span className="icon icon-filled" style={{fontSize:36,color:'#059669'}}>mark_email_read</span>
-              </div>
-              <h1 style={{fontSize:22,fontWeight:800,color:'#0b1c30',textAlign:'center',marginBottom:8}}>Check your email</h1>
-              <p style={{fontSize:14,color:'#64748b',textAlign:'center',lineHeight:1.7,marginBottom:8}}>
-                If <strong>{email}</strong> is registered, you'll receive a reset link shortly.
-              </p>
-              <p style={{fontSize:12,color:'#94a3b8',textAlign:'center',marginBottom:24}}>
-                Didn't receive it? Check your spam folder.
-              </p>
-              <button onClick={() => setSent(false)} className="btn btn-secondary" style={{width:'100%',marginBottom:12,fontSize:14}}>
-                Try a different email
-              </button>
-            </>
-          )}
-          <div style={{textAlign:'center',marginTop:16}}>
-            <Link to="/login" style={{fontSize:13,color:'#0ea5e9',textDecoration:'none',fontWeight:600,display:'inline-flex',alignItems:'center',gap:4}}>
-              <span className="icon" style={{fontSize:15}}>arrow_back</span> Back to sign in
-            </Link>
+              </>
+            )}
+            <div className={s.backLink}>
+              <Link to="/login">
+                <span className="icon" style={{ fontSize: 15 }}>arrow_back</span> Back to sign in
+              </Link>
+            </div>
           </div>
+
         </div>
       </div>
-    </div>
+    </>
   )
 }

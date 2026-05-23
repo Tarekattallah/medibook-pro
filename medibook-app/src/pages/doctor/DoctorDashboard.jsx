@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'   // ← السطر الجديد
 import Navbar from '../../components/layout/Navbar'
 import { useAuth } from '../../context/AuthContext'
 import { useToast } from '../../components/ui/Toast'
@@ -31,8 +32,14 @@ export default function DoctorDashboard() {
         <div style={{marginBottom:32}}>
           <h1 style={{fontSize:26,fontWeight:800,color:'#0b1c30'}}>Doctor Dashboard</h1>
           <p style={{fontSize:14,color:'#64748b',marginTop:4}}>{today}</p>
+          {/* ← الزر المضاف بنفس الستايل */}
+          <Link to="/doctor/edit-profile" className="btn btn-secondary" style={{marginTop:12, fontSize:13, padding:'7px 14px'}}>
+            <span className="icon" style={{fontSize:16, marginRight:6}}>edit</span>
+            Edit Profile
+          </Link>
         </div>
 
+        {/* باقي الكود لم يتغير */}
         <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:16,marginBottom:32}}>
           {[['Today\'s Patients',apts.filter(a=>a.status!=='cancelled').length,'people','#eff6ff','#2563eb'],['Confirmed',apts.filter(a=>a.status==='confirmed').length,'check_circle','#ecfdf5','#059669'],['Pending',apts.filter(a=>a.status==='pending').length,'pending','#fffbeb','#d97706'],['Completed',apts.filter(a=>a.status==='completed').length,'task_alt','#f5f3ff','#7c3aed']].map(([label,val,icon,bg,ic])=>(
             <div key={label} className="card" style={{padding:20}}>

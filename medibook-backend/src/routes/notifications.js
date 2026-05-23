@@ -9,5 +9,6 @@ router.get('/',                      ctrl.getNotifications)
 router.patch('/mark-all-read',       ctrl.markAllRead)
 router.patch('/:id/read',            ctrl.markRead)
 router.delete('/:id',                ctrl.deleteNotification)
+router.delete('/clear-all', protect, ctrl.clearAll);
 
 module.exports = router

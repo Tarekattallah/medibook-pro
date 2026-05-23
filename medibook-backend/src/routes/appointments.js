@@ -9,6 +9,12 @@ router.post('/',              restrictTo('patient'), ctrl.bookAppointment)
 router.get('/my',             restrictTo('patient'), ctrl.getMyAppointments)
 router.get('/doctor',         restrictTo('doctor'),  ctrl.getDoctorAppointments)
 router.get('/admin/all',      restrictTo('admin'),   ctrl.getAllAppointments)
+
+// ========== NEW: Dashboard Analytics ==========
+router.get('/stats/weekly',   restrictTo('patient'), ctrl.getWeeklyStats)
+router.get('/recent',         restrictTo('patient'), ctrl.getRecentActivity)
+
+// ========== EXISTING :id routes ==========
 router.get('/:id',                                   ctrl.getAppointment)
 router.patch('/:id/cancel',                          ctrl.cancelAppointment)
 router.patch('/:id/complete', restrictTo('doctor'),  ctrl.completeAppointment)

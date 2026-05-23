@@ -1,0 +1,359 @@
+/* ── Appointments Page ───────────────────────────────────────── */
+.pageWrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px;
+}
+
+.headerRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.pageTitle {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0b1c30;
+    letter-spacing: -0.02em;
+}
+
+/* ── Tabs ──────────────────────────────────────────────────────── */
+.tabsBar {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 24px;
+}
+
+.tabBtn {
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    background: none;
+    border: none;
+    border-bottom: 2.5px solid transparent;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tabBtn:hover {
+    color: #0ea5e9;
+}
+
+.tabActive {
+    color: #006591;
+    border-bottom-color: #006591;
+    font-weight: 600;
+}
+
+.tabBadge {
+    background: #e2e8f0;
+    color: #475569;
+    border-radius: 99px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.tabActive .tabBadge {
+    background: #e0f2fe;
+    color: #006591;
+}
+
+/* ── Appointment Card ────────────────────────────────────────────── */
+.appointmentCard {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    transition: all 0.2s ease;
+}
+
+.appointmentCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1);
+}
+
+.cardLeft {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+}
+
+.doctorAvatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #e0f2fe;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #bae6fd, #0ea5e9);
+}
+
+.doctorAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatarInitials {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #bae6fd, #0ea5e9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 20px;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.doctorName {
+    font-weight: 700;
+    font-size: 16px;
+    color: #0b1c30;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.specialty {
+    font-size: 13px;
+    color: #0ea5e9;
+    font-weight: 600;
+}
+
+.metaRow {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 4px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.metaItem {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.cardRight {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* ── Status Badge ─────────────────────────────────────────────────── */
+.statusBadge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.statusConfirmed {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.statusPending {
+    background: #fffbeb;
+    color: #d97706;
+}
+
+.statusCancelled {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.statusCompleted {
+    background: #f5f3ff;
+    color: #7c3aed;
+}
+
+/* ── Empty State ─────────────────────────────────────────────────── */
+.emptyState {
+    text-align: center;
+    padding: 60px 24px;
+}
+
+.emptyIcon {
+    font-size: 56px;
+    color: #cbd5e1;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.emptyTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0b1c30;
+    margin-bottom: 8px;
+}
+
+/* ── Loading ─────────────────────────────────────────────────────── */
+.spinnerWrap {
+    display: flex;
+    justify-content: center;
+    padding: 60px 0;
+}
+
+/* ── Preparation Checklist ────────────────────────────────────────── */
+.checklistSection {
+    margin-top: 32px;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e8ecf1;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
+}
+
+.checklistHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0b1c30;
+}
+
+.checklistGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.checklistItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    background: #f8fafc;
+    font-size: 13px;
+    color: #475569;
+}
+
+/* ── Quick Actions Section ────────────────────────────────────────── */
+.quickActions {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.teleconsultCard {
+    background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+    border: 1px solid #bae6fd;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.teleconsultIcon {
+    background: #0ea5e9;
+    color: #fff;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+.quickSupportCard {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+/* ── Health Insights Card ─────────────────────────────────────────── */
+.healthInsights {
+    margin-top: 24px;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e8ecf1;
+    padding: 20px;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
+}
+
+.healthHeader {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0b1c30;
+    margin-bottom: 16px;
+}
+
+.healthRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.healthLabel {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.healthValue {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0b1c30;
+}
+
+.healthBars {
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    height: 28px;
+}
+
+.bar {
+    width: 6px;
+    border-radius: 3px;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .appointmentCard {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .quickActions {
+        grid-template-columns: 1fr;
+    }
+}

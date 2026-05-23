@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import Navbar from '../../components/layout/Navbar'
 import { useAuth } from '../../context/AuthContext'
 import { useToast } from '../../components/ui/Toast'
+import s from './ProfileSettingsPage.module.css'
 
 const TABS = [
-  { id:'profile',  icon:'person',    label:'Personal Info' },
-  { id:'security', icon:'lock',      label:'Password' },
-  { id:'danger',   icon:'warning',   label:'Danger Zone' },
+  { id: 'profile',  icon: 'person',    label: 'Personal Info' },
+  { id: 'security', icon: 'lock',      label: 'Password' },
+  { id: 'danger',   icon: 'warning',   label: 'Danger Zone' },
 ]
 
 export default function ProfileSettingsPage() {
@@ -29,6 +30,11 @@ export default function ProfileSettingsPage() {
     newPassword:     '',
     confirmPassword: '',
   })
+
+  // حالة إظهار كلمات المرور
+  const [showCurrent, setShowCurrent] = useState(false)
+  const [showNew,     setShowNew]     = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
 
   const setP  = k => e => setProfile(f  => ({...f, [k]: e.target.value}))
   const setPw = k => e => setPasswords(f => ({...f, [k]: e.target.value}))
@@ -73,31 +79,36 @@ export default function ProfileSettingsPage() {
 
   return (
     <div className="page">
-      <Navbar/>
-      <div style={{maxWidth:860,margin:'0 auto',padding:'32px 24px'}}>
-        <h1 style={{fontSize:26,fontWeight:800,color:'#0b1c30',marginBottom:28,letterSpacing:'-0.02em'}}>
-          Account Settings
-        </h1>
+      <Navbar />
+      <div className={s.pageWrap}>
+        {/* Header */}
+        <div className={s.pageHeader}>
+          <div className={s.breadcrumb}>
+            <span>Account</span>
+            <span className="icon" style={{ fontSize: 14 }}>chevron_right</span>
+            <span style={{ color: '#0ea5e9' }}>Settings</span>
+          </div>
+          <h1 className={s.pageTitle}>Account Settings</h1>
+          <p className={s.pageSub}>Manage your professional profile and clinical preferences.</p>
+        </div>
 
-        <div style={{display:'grid',gridTemplateColumns:'220px 1fr',gap:24,alignItems:'flex-start'}}>
-          {/* Sidebar tabs */}
-          <div style={{background:'#fff',border:'1.5px solid #e2e8f0',borderRadius:12,overflow:'hidden'}}>
-            {/* Avatar */}
-            <div style={{padding:24,textAlign:'center',borderBottom:'1px solid #f1f5f9'}}>
-              <div style={{width:72,height:72,borderRadius:'50%',background:'linear-gradient(135deg,#bae6fd,#0ea5e9)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,fontWeight:800,color:'#fff',margin:'0 auto 12px'}}>
-                {initials}
-              </div>
-              <div style={{fontWeight:700,fontSize:14,color:'#0b1c30'}}>{user?.name}</div>
-              <div style={{fontSize:12,color:'#94a3b8',marginTop:3,textTransform:'capitalize'}}>{user?.role}</div>
-              <div style={{fontSize:12,color:'#64748b',marginTop:2}}>{user?.email}</div>
+        <div className={s.layout}>
+          {/* Sidebar */}
+          <div className={s.sidebar}>
+            <div className={s.sidebarHeader}>
+              <div className={s.avatar}>{initials}</div>
+              <div className={s.sidebarName}>{user?.name}</div>
+              <div className={s.sidebarRole}>{user?.role}</div>
+              <div className={s.sidebarEmail}>{user?.email}</div>
             </div>
-
-            {/* Nav */}
-            <nav style={{padding:8}}>
+            <nav className={s.sidebarNav}>
               {TABS.map(t => (
-                <button key={t.id} onClick={() => setTab(t.id)}
-                  style={{display:'flex',alignItems:'center',gap:10,width:'100%',padding:'10px 14px',borderRadius:8,border:'none',background:tab===t.id?'#f0f9ff':'transparent',color:tab===t.id?'#0ea5e9':'#475569',fontSize:13,fontWeight:tab===t.id?700:500,cursor:'pointer',transition:'all .15s',textAlign:'left'}}>
-                  <span className="icon" style={{fontSize:18}}>{t.icon}</span>
+                <button
+                  key={t.id}
+                  onClick={() => setTab(t.id)}
+                  className={`${s.tabBtn} ${tab === t.id ? s.tabBtnActive : ''}`}
+                >
+                  <span className={`icon ${s.tabIcon}`}>{t.icon}</span>
                   {t.label}
                 </button>
               ))}
@@ -105,42 +116,42 @@ export default function ProfileSettingsPage() {
           </div>
 
           {/* Content */}
-          <div className="card" style={{padding:32}}>
-
+          <div className={s.contentCard}>
             {/* Personal Info */}
             {tab === 'profile' && (
               <form onSubmit={saveProfile}>
-                <h2 style={{fontSize:18,fontWeight:700,color:'#0b1c30',marginBottom:24}}>Personal Information</h2>
-                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
-                  <div className="form-group" style={{gridColumn:'1/-1'}}>
-                    <label className="label">Full Name</label>
-                    <input className="input" value={profile.name} onChange={setP('name')} required/>
+                <h2 className={s.sectionTitle}>Personal Information</h2>
+                <p className={s.sectionDesc}>Update your identity and professional details.</p>
+                <div className={s.formGrid}>
+                  <div className={`${s.formGroup} ${s.formGroupFull}`}>
+                    <label className={s.label}>Full Name</label>
+                    <input className={s.input} value={profile.name} onChange={setP('name')} required />
                   </div>
-                  <div className="form-group" style={{gridColumn:'1/-1'}}>
-                    <label className="label">Email Address <span style={{color:'#94a3b8',fontWeight:400,fontSize:12}}>(cannot be changed)</span></label>
-                    <input className="input" value={user?.email} disabled style={{background:'#f8fafc',color:'#94a3b8',cursor:'not-allowed'}}/>
+                  <div className={`${s.formGroup} ${s.formGroupFull}`}>
+                    <label className={s.label}>Email Address <span style={{ color: '#94a3b8', fontWeight: 400, fontSize: 12 }}>(cannot be changed)</span></label>
+                    <input className={`${s.input} ${s.inputDisabled}`} value={user?.email} disabled />
                   </div>
-                  <div className="form-group">
-                    <label className="label">Phone Number</label>
-                    <input className="input" value={profile.phone} onChange={setP('phone')} placeholder="+20 10 1234 5678"/>
+                  <div className={s.formGroup}>
+                    <label className={s.label}>Phone Number</label>
+                    <input className={s.input} value={profile.phone} onChange={setP('phone')} placeholder="+20 10 1234 5678" />
                   </div>
-                  <div className="form-group">
-                    <label className="label">Date of Birth</label>
-                    <input className="input" type="date" value={profile.dateOfBirth} onChange={setP('dateOfBirth')}/>
+                  <div className={s.formGroup}>
+                    <label className={s.label}>Date of Birth</label>
+                    <input className={s.input} type="date" value={profile.dateOfBirth} onChange={setP('dateOfBirth')} />
                   </div>
                   {user?.role === 'patient' && (
-                    <div className="form-group">
-                      <label className="label">Blood Type</label>
-                      <select className="input" value={profile.bloodType} onChange={setP('bloodType')} style={{cursor:'pointer'}}>
+                    <div className={s.formGroup}>
+                      <label className={s.label}>Blood Type</label>
+                      <select className={s.input} value={profile.bloodType} onChange={setP('bloodType')} style={{ cursor: 'pointer' }}>
                         <option value="">Select</option>
                         {['A+','A-','B+','B-','AB+','AB-','O+','O-'].map(b => <option key={b}>{b}</option>)}
                       </select>
                     </div>
                   )}
                 </div>
-                <div style={{display:'flex',justifyContent:'flex-end',marginTop:8}}>
-                  <button type="submit" className="btn btn-primary" style={{minWidth:130}} disabled={saving}>
-                    {saving ? <div className="spinner" style={{width:18,height:18,borderWidth:2}}/> : 'Save Changes'}
+                <div className={s.saveBar}>
+                  <button type="submit" className={s.saveBtn} disabled={saving}>
+                    {saving ? <div className="spinner" style={{ width: 18, height: 18, borderWidth: 2 }} /> : 'Save Changes'}
                   </button>
                 </div>
               </form>
@@ -149,26 +160,65 @@ export default function ProfileSettingsPage() {
             {/* Password */}
             {tab === 'security' && (
               <form onSubmit={changePassword}>
-                <h2 style={{fontSize:18,fontWeight:700,color:'#0b1c30',marginBottom:6}}>Change Password</h2>
-                <p style={{fontSize:13,color:'#64748b',marginBottom:24}}>After changing your password, you'll be logged out.</p>
-                <div className="form-group">
-                  <label className="label">Current Password</label>
-                  <input className="input" type="password" value={passwords.currentPassword} onChange={setPw('currentPassword')} placeholder="••••••••" required/>
+                <h2 className={s.sectionTitle}>Change Password</h2>
+                <p className={s.sectionDesc}>After changing your password, you'll be logged out.</p>
+                <div className={s.formGrid}>
+                  <div className={`${s.formGroup} ${s.formGroupFull}`}>
+                    <label className={s.label}>Current Password</label>
+                    <div className={s.passwordWrapper}>
+                      <input
+                        className={s.input}
+                        type={showCurrent ? 'text' : 'password'}
+                        value={passwords.currentPassword}
+                        onChange={setPw('currentPassword')}
+                        placeholder="••••••••"
+                        required
+                      />
+                      <button type="button" className={s.togglePassword} onClick={() => setShowCurrent(!showCurrent)}>
+                        <span className="icon" style={{ fontSize: 20 }}>{showCurrent ? 'visibility_off' : 'visibility'}</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div className={`${s.formGroup} ${s.formGroupFull}`}>
+                    <label className={s.label}>New Password</label>
+                    <div className={s.passwordWrapper}>
+                      <input
+                        className={s.input}
+                        type={showNew ? 'text' : 'password'}
+                        value={passwords.newPassword}
+                        onChange={setPw('newPassword')}
+                        placeholder="Min 8 characters"
+                        minLength={8}
+                        required
+                      />
+                      <button type="button" className={s.togglePassword} onClick={() => setShowNew(!showNew)}>
+                        <span className="icon" style={{ fontSize: 20 }}>{showNew ? 'visibility_off' : 'visibility'}</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div className={`${s.formGroup} ${s.formGroupFull}`}>
+                    <label className={s.label}>Confirm New Password</label>
+                    <div className={s.passwordWrapper}>
+                      <input
+                        className={s.input}
+                        type={showConfirm ? 'text' : 'password'}
+                        value={passwords.confirmPassword}
+                        onChange={setPw('confirmPassword')}
+                        placeholder="Repeat new password"
+                        required
+                      />
+                      <button type="button" className={s.togglePassword} onClick={() => setShowConfirm(!showConfirm)}>
+                        <span className="icon" style={{ fontSize: 20 }}>{showConfirm ? 'visibility_off' : 'visibility'}</span>
+                      </button>
+                    </div>
+                    {passwords.newPassword && passwords.confirmPassword && passwords.newPassword !== passwords.confirmPassword && (
+                      <p className={s.errorText}>Passwords don't match</p>
+                    )}
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label className="label">New Password</label>
-                  <input className="input" type="password" value={passwords.newPassword} onChange={setPw('newPassword')} placeholder="Min 8 characters" minLength={8} required/>
-                </div>
-                <div className="form-group">
-                  <label className="label">Confirm New Password</label>
-                  <input className="input" type="password" value={passwords.confirmPassword} onChange={setPw('confirmPassword')} placeholder="Repeat new password" required/>
-                  {passwords.newPassword && passwords.confirmPassword && passwords.newPassword !== passwords.confirmPassword && (
-                    <p style={{fontSize:12,color:'#dc2626',marginTop:6}}>Passwords don't match</p>
-                  )}
-                </div>
-                <div style={{display:'flex',justifyContent:'flex-end',marginTop:8}}>
-                  <button type="submit" className="btn btn-primary" style={{minWidth:160}} disabled={saving}>
-                    {saving ? <div className="spinner" style={{width:18,height:18,borderWidth:2}}/> : 'Change Password'}
+                <div className={s.saveBar}>
+                  <button type="submit" className={s.saveBtn} disabled={saving}>
+                    {saving ? <div className="spinner" style={{ width: 18, height: 18, borderWidth: 2 }} /> : 'Change Password'}
                   </button>
                 </div>
               </form>
@@ -177,30 +227,24 @@ export default function ProfileSettingsPage() {
             {/* Danger Zone */}
             {tab === 'danger' && (
               <div>
-                <h2 style={{fontSize:18,fontWeight:700,color:'#0b1c30',marginBottom:6}}>Danger Zone</h2>
-                <p style={{fontSize:13,color:'#64748b',marginBottom:24}}>These actions are permanent and cannot be undone.</p>
-                <div style={{border:'1.5px solid #fecaca',borderRadius:12,padding:20}}>
-                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:16,flexWrap:'wrap'}}>
+                <h2 className={s.sectionTitle}>Danger Zone</h2>
+                <p className={s.sectionDesc}>These actions are permanent and cannot be undone.</p>
+                <div className={s.dangerSection}>
+                  <div className={s.dangerCard}>
                     <div>
-                      <div style={{fontWeight:700,fontSize:14,color:'#0b1c30'}}>Delete Account</div>
-                      <div style={{fontSize:13,color:'#64748b',marginTop:3}}>
-                        Permanently delete your account and all your data.
-                      </div>
+                      <div className={s.dangerTitle}>Delete Account</div>
+                      <div className={s.dangerDesc}>Permanently delete your account and all your data.</div>
                     </div>
-                    <button onClick={deleteAccount} className="btn btn-danger" style={{flexShrink:0,fontSize:13}}>
+                    <button onClick={deleteAccount} className={`${s.dangerBtn} ${s.dangerBtnDelete}`}>
                       Delete Account
                     </button>
                   </div>
-                </div>
-                <div style={{border:'1.5px solid #fed7aa',borderRadius:12,padding:20,marginTop:12}}>
-                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:16,flexWrap:'wrap'}}>
+                  <div className={s.dangerCard} style={{ borderColor: '#fed7aa' }}>
                     <div>
-                      <div style={{fontWeight:700,fontSize:14,color:'#0b1c30'}}>Sign Out</div>
-                      <div style={{fontSize:13,color:'#64748b',marginTop:3}}>
-                        Sign out of your account on this device.
-                      </div>
+                      <div className={s.dangerTitle}>Sign Out</div>
+                      <div className={s.dangerDesc}>Sign out of your account on this device.</div>
                     </div>
-                    <button onClick={() => { logout(); navigate('/') }} className="btn btn-secondary" style={{flexShrink:0,fontSize:13}}>
+                    <button onClick={() => { logout(); navigate('/') }} className={`${s.dangerBtn} ${s.dangerBtnSignout}`}>
                       Sign Out
                     </button>
                   </div>

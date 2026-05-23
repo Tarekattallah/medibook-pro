@@ -53,3 +53,12 @@ exports.createNotification = async (userId, { type, title, body, link }) => {
     await Notification.create({ user: userId, type, title, body, link: link || '/' })
   } catch (err) { console.error('Notification error:', err.message) }
 }
+// DELETE /api/notifications/clear-all
+exports.clearAll = async (req, res) => {
+  try {
+    await Notification.deleteMany({ user: req.user._id });
+    res.json({ status: 'success', message: 'All notifications cleared.' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

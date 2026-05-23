@@ -1,0 +1,721 @@
+/* ═══════════════════════════════
+   PROFILE SETTINGS PAGE
+═══════════════════════════════ */
+
+.pageWrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 32px 24px;
+}
+
+.pageHeader {
+    margin-bottom: 32px;
+}
+
+.breadcrumb {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pageTitle {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0b1c30;
+}
+
+.pageSub {
+    font-size: 14px;
+    color: #64748b;
+    margin-top: 6px;
+}
+
+/* ── Layout ───────────────────────────────────────────────────── */
+.layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────── */
+.sidebar {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.sidebarHeader {
+    padding: 24px;
+    text-align: center;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #bae6fd, #0ea5e9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 auto 12px;
+}
+
+.sidebarName {
+    font-weight: 700;
+    font-size: 14px;
+    color: #0b1c30;
+}
+
+.sidebarRole {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 3px;
+    text-transform: capitalize;
+}
+
+.sidebarEmail {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.sidebarNav {
+    padding: 8px;
+}
+
+.tabBtn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+}
+
+.tabBtn:hover {
+    background: #f8fafc;
+    color: #0ea5e9;
+}
+
+.tabBtnActive {
+    background: #f0f9ff;
+    color: #0ea5e9;
+    font-weight: 700;
+}
+
+.tabIcon {
+    font-size: 18px;
+}
+
+/* ── Content Card ────────────────────────────────────────────── */
+.contentCard {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.sectionTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0b1c30;
+    margin-bottom: 6px;
+}
+
+.sectionDesc {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 28px;
+}
+
+/* ── Form Grid ───────────────────────────────────────────────── */
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.formGroupFull {
+    grid-column: 1 / -1;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.input {
+    height: 42px;
+    padding: 0 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.input:focus {
+    border-color: #0ea5e9;
+}
+
+.inputDisabled {
+    background: #f8fafc;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+.textarea {
+    padding: 12px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.textarea:focus {
+    border-color: #0ea5e9;
+}
+
+.errorText {
+    font-size: 12px;
+    color: #dc2626;
+    margin-top: 4px;
+}
+
+/* ── Save Button ─────────────────────────────────────────────── */
+.saveBar {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+}
+
+.saveBtn {
+    min-width: 140px;
+    padding: 10px 24px;
+    background: #0ea5e9;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.saveBtn:hover {
+    background: #0284c7;
+}
+
+.saveBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ── Security Card ───────────────────────────────────────────── */
+.securityRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.securityRow:last-child {
+    border-bottom: none;
+}
+
+.securityLabel {
+    font-weight: 600;
+    font-size: 14px;
+    color: #0b1c30;
+}
+
+.securityDesc {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 2px;
+}
+
+/* ── Switch ──────────────────────────────────────────────────── */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e1;
+    transition: 0.2s;
+    border-radius: 22px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.2s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #0ea5e9;
+}
+
+input:checked+.slider:before {
+    transform: translateX(18px);
+}
+
+/* ── Danger Zone ─────────────────────────────────────────────── */
+.dangerSection {
+    margin-top: 24px;
+}
+
+.dangerCard {
+    border: 1.5px solid #fecaca;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.dangerTitle {
+    font-weight: 700;
+    font-size: 14px;
+    color: #0b1c30;
+}
+
+.dangerDesc {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 3px;
+}
+
+.dangerBtn {
+    font-size: 13px;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.15s;
+}
+
+.dangerBtnDelete {
+    background: #dc2626;
+    color: #fff;
+}
+
+.dangerBtnDelete:hover {
+    background: #b91c1c;
+}
+
+.dangerBtnSignout {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+
+.dangerBtnSignout:hover {
+    background: #e2e8f0;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .formGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ═══════════════════════════════
+   PROFILE SETTINGS PAGE
+═══════════════════════════════ */
+
+.pageWrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 32px 24px;
+}
+
+.pageHeader {
+    margin-bottom: 32px;
+}
+
+.breadcrumb {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pageTitle {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0b1c30;
+}
+
+.pageSub {
+    font-size: 14px;
+    color: #64748b;
+    margin-top: 6px;
+}
+
+/* ── Layout ───────────────────────────────────────────────────── */
+.layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────── */
+.sidebar {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.sidebarHeader {
+    padding: 24px;
+    text-align: center;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #bae6fd, #0ea5e9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 auto 12px;
+}
+
+.sidebarName {
+    font-weight: 700;
+    font-size: 14px;
+    color: #0b1c30;
+}
+
+.sidebarRole {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 3px;
+    text-transform: capitalize;
+}
+
+.sidebarEmail {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.sidebarNav {
+    padding: 8px;
+}
+
+.tabBtn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+}
+
+.tabBtn:hover {
+    background: #f8fafc;
+    color: #0ea5e9;
+}
+
+.tabBtnActive {
+    background: #f0f9ff;
+    color: #0ea5e9;
+    font-weight: 700;
+}
+
+.tabIcon {
+    font-size: 18px;
+}
+
+/* ── Content Card ────────────────────────────────────────────── */
+.contentCard {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.sectionTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0b1c30;
+    margin-bottom: 6px;
+}
+
+.sectionDesc {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 28px;
+}
+
+/* ── Form Grid ───────────────────────────────────────────────── */
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.formGroupFull {
+    grid-column: 1 / -1;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.input {
+    height: 42px;
+    padding: 0 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.input:focus {
+    border-color: #0ea5e9;
+}
+
+.inputDisabled {
+    background: #f8fafc;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+.textarea {
+    padding: 12px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.textarea:focus {
+    border-color: #0ea5e9;
+}
+
+.errorText {
+    font-size: 12px;
+    color: #dc2626;
+    margin-top: 4px;
+}
+
+/* ── Password Field ───────────────────────────────────────────── */
+.passwordWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.passwordWrapper .input {
+    width: 100%;
+    padding-right: 44px;
+}
+
+.togglePassword {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+}
+
+/* ── Save Button ─────────────────────────────────────────────── */
+.saveBar {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+}
+
+.saveBtn {
+    min-width: 140px;
+    padding: 10px 24px;
+    background: #0ea5e9;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.saveBtn:hover {
+    background: #0284c7;
+}
+
+.saveBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ── Danger Zone ─────────────────────────────────────────────── */
+.dangerSection {
+    margin-top: 24px;
+}
+
+.dangerCard {
+    border: 1.5px solid #fecaca;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.dangerTitle {
+    font-weight: 700;
+    font-size: 14px;
+    color: #0b1c30;
+}
+
+.dangerDesc {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 3px;
+}
+
+.dangerBtn {
+    font-size: 13px;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.15s;
+}
+
+.dangerBtnDelete {
+    background: #dc2626;
+    color: #fff;
+}
+
+.dangerBtnDelete:hover {
+    background: #b91c1c;
+}
+
+.dangerBtnSignout {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+
+.dangerBtnSignout:hover {
+    background: #e2e8f0;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .formGrid {
+        grid-template-columns: 1fr;
+    }
+}

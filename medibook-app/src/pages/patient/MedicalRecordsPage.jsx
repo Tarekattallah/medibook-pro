@@ -1,214 +1,353 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import Navbar from '../../components/layout/Navbar'
 import { useAuth } from '../../context/AuthContext'
 import { useToast } from '../../components/ui/Toast'
+import s from './MedicalRecordsPage.module.css'
 
-const ACCEPT = '.pdf,.jpg,.jpeg,.png,.doc,.docx'
+/* ── Helper: تعيين نوع السجل ──────────────────────────────────── */
+const getRecordTypeStyle = (type) => {
+  const map = {
+    'lab':         s.typeLab,
+    'prescription': s.typePrescription,
+    'imaging':     s.typeImaging,
+    'emergency':   s.typeEmergency,
+  }
+  return map[type] || s.typeGeneral
+}
 
-const TYPE_META = {
-  'lab-result':   { icon:'science',     ic:'#7c3aed', bg:'#f5f3ff', label:'Lab Results'  },
-  'prescription': { icon:'medication',  ic:'#059669', bg:'#ecfdf5', label:'Prescription'  },
-  'imaging':      { icon:'radiology',   ic:'#0284c7', bg:'#eff6ff', label:'Imaging'       },
-  'consultation': { icon:'stethoscope', ic:'#dc2626', bg:'#fef2f2', label:'Consultation'  },
-  'vaccination':  { icon:'vaccines',    ic:'#d97706', bg:'#fffbeb', label:'Vaccination'   },
-  'other':        { icon:'description', ic:'#64748b', bg:'#f8fafc', label:'Document'      },
+const getRecordTypeLabel = (type) => {
+  const map = {
+    'lab':          'Lab Results',
+    'prescription': 'Prescriptions',
+    'imaging':      'Imaging',
+    'emergency':    'Emergency',
+  }
+  return map[type] || 'General'
+}
+
+/* ── Helper: الأحرف الأولى من الاسم ───────────────────────────── */
+const getInitials = (name) => {
+  if (!name) return '??'
+  return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+}
+
+/* ── Helper: لون الصورة الرمزية ────────────────────────────────── */
+const getAvatarColor = (name) => {
+  const colors = [
+    { bg: '#e0f2fe', text: '#0369a1' },
+    { bg: '#f3e8ff', text: '#7c3aed' },
+    { bg: '#ecfdf5', text: '#059669' },
+    { bg: '#fff7ed', text: '#ea580c' },
+    { bg: '#fef2f2', text: '#dc2626' },
+  ]
+  if (!name) return colors[0]
+  const idx = name.charCodeAt(0) % colors.length
+  return colors[idx]
 }
 
 export default function MedicalRecordsPage() {
   const { apiFetch } = useAuth()
-  const toast   = useToast()
-  const fileRef = useRef(null)
+  const toast = useToast()
+  const fileInputRef = useRef(null)
 
-  const [records,   setRecords]   = useState([])
-  const [loading,   setLoading]   = useState(true)
-  const [uploading, setUploading] = useState(false)
-  const [dragOver,  setDragOver]  = useState(false)
-  const [preview,   setPreview]   = useState(null)
+  const [records, setRecords] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [page, setPage] = useState(1)
+  const [total, setTotal] = useState(0)
+  const [totalRecords, setTotalRecords] = useState(0)
+  const limit = 10
 
-  // Load records from API
-  const loadRecords = async () => {
+  // ملخصات الشريط الجانبي (من نفس السجلات)
+  const recentLabs = records.filter(r => r.type === 'lab').slice(0, 2)
+  const activePrescriptions = records.filter(r => r.type === 'prescription').slice(0, 2)
+
+  /* ── جلب السجلات الطبية ────────────────────────────────────── */
+  const loadRecords = useCallback(async (query = searchQuery, pageNum = page) => {
     setLoading(true)
     try {
-      const data = await apiFetch('/medical-records')
+      const qs = new URLSearchParams({ page: pageNum, limit })
+      if (query.trim()) qs.set('q', query.trim())
+
+      const data = await apiFetch(`/medical-records/my?${qs}`)
       setRecords(data.records || [])
+      setTotal(data.total || 0)
+      setTotalRecords(data.allTotal || data.total || 0)
     } catch {
-      // Fallback static demo data if API not ready
-      setRecords([
-        { _id:'1', type:'lab-result',   title:'Complete Blood Count',  date: new Date('2025-01-10'), doctor:{ name:'Dr. Sarah Johnson' }, attachments:[] },
-        { _id:'2', type:'prescription', title:'Medication Refill',     date: new Date('2024-12-15'), doctor:{ name:'Dr. Michael Chen'  }, attachments:[] },
-        { _id:'3', type:'imaging',      title:'Chest X-Ray Report',    date: new Date('2024-11-20'), doctor:{ name:'Dr. James Wilson'  }, attachments:[] },
-      ])
-    } finally { setLoading(false) }
+      setRecords([])
+      setTotal(0)
+    } finally {
+      setLoading(false)
+    }
+  }, [apiFetch, limit, searchQuery, page])
+
+  useEffect(() => {
+    loadRecords(searchQuery, page)
+  }, [page])
+
+  const handleSearch = (e) => {
+    e.preventDefault()
+    loadRecords(searchQuery, 1)
+    setPage(1)
   }
 
-  useEffect(() => { loadRecords() }, [])
+  /* ── رفع ملف جديد ───────────────────────────────────────────── */
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
+  }
 
-  const uploadFile = async file => {
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0]
     if (!file) return
-    if (file.size > 10 * 1024 * 1024) { toast('File too large (max 10MB)', 'error'); return }
-    setUploading(true)
-    try {
-      const form = new FormData()
-      form.append('file',  file)
-      form.append('title', file.name.replace(/\.[^/.]+$/, ''))
-      form.append('type',  file.type.startsWith('image') ? 'imaging' : 'other')
 
-      const token = localStorage.getItem('mb_token')
-      const res   = await fetch('/api/medical-records', {
-        method:  'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body:    form,
+    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'application/msword',
+                          'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+    if (!allowedTypes.includes(file.type)) {
+      toast('Unsupported file type. Allowed: PDF, JPG, PNG, DOC.', 'error')
+      e.target.value = ''
+      return
+    }
+    if (file.size > 15 * 1024 * 1024) {
+      toast('File size must be less than 15MB.', 'error')
+      e.target.value = ''
+      return
+    }
+
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('title', file.name)
+    formData.append('type', 'general') // يمكن تحسينه لاحقاً
+
+    try {
+      await apiFetch('/medical-records', {
+        method: 'POST',
+        body: formData,
+        // لا نضع Content-Type هنا، سيتم تعيينه تلقائياً مع boundary
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.message)
-
       toast('File uploaded successfully!')
-      loadRecords() // reload from server
+      loadRecords(searchQuery, page)
     } catch (err) {
-      // Fallback: add locally with object URL
-      const local = {
-        _id:         Date.now().toString(),
-        type:        file.type.startsWith('image') ? 'imaging' : 'other',
-        title:       file.name.replace(/\.[^/.]+$/, ''),
-        date:        new Date(),
-        doctor:      null,
-        attachments: [{ name: file.name, url: URL.createObjectURL(file), type: file.type }],
-        _local:      true,
-      }
-      setRecords(prev => [local, ...prev])
-      toast('Saved locally (backend not connected)')
-    } finally { setUploading(false) }
+      toast(err.message || 'Upload failed.', 'error')
+    } finally {
+      e.target.value = ''
+    }
   }
 
-  const deleteRecord = async id => {
-    if (!window.confirm('Delete this record?')) return
-    try {
-      await apiFetch(`/medical-records/${id}`, { method:'DELETE' })
-      setRecords(prev => prev.filter(r => r._id !== id))
-      toast('Record deleted')
-    } catch (err) { toast(err.message, 'error') }
-  }
-
-  const onFileChange = e  => { const f = e.target.files?.[0]; if (f) uploadFile(f); e.target.value = '' }
-  const onDrop       = e  => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files?.[0]; if (f) uploadFile(f) }
-  const onDragOver   = e  => { e.preventDefault(); setDragOver(true) }
-  const onDragLeave  = () => setDragOver(false)
-
-  const fmtDate = d => new Date(d).toLocaleDateString('en', { month:'short', day:'numeric', year:'numeric' })
+  const totalPages = Math.ceil(total / limit)
 
   return (
     <div className="page">
-      <Navbar/>
+      <Navbar />
 
-      {/* Preview modal */}
-      {preview && (
-        <div style={{position:'fixed',inset:0,background:'rgba(15,23,42,.8)',backdropFilter:'blur(4px)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000,padding:24}}
-          onClick={() => setPreview(null)}>
-          <div style={{background:'#fff',borderRadius:16,padding:24,maxWidth:820,width:'100%',maxHeight:'90vh',overflow:'auto'}} onClick={e=>e.stopPropagation()}>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}>
-              <h3 style={{fontWeight:700,color:'#0b1c30',fontSize:16}}>{preview.name}</h3>
-              <button onClick={() => setPreview(null)} style={{background:'none',border:'none',cursor:'pointer'}}>
-                <span className="icon" style={{fontSize:24,color:'#64748b'}}>close</span>
-              </button>
+      <div className={s.pageWrap}>
+        {/* ── Header ── */}
+        <div className={s.headerSection}>
+          <div className={s.headerLeft}>
+            <div className={s.titleRow}>
+              <h1 className={s.pageTitle}>Medical History</h1>
+              <span className={s.recordCount}>{totalRecords} Records</span>
             </div>
-            {preview.url && (preview.type?.startsWith('image') || /\.(jpg|jpeg|png|gif|webp)$/i.test(preview.url))
-              ? <img src={preview.url} alt={preview.name} style={{width:'100%',borderRadius:8}}/>
-              : <div style={{textAlign:'center',padding:60,color:'#94a3b8'}}>
-                  <span className="icon" style={{fontSize:64,display:'block',marginBottom:12}}>description</span>
-                  <p>Preview not available.</p>
-                  <a href={preview.url} download target="_blank" rel="noreferrer" style={{color:'#0ea5e9',fontWeight:600}}>Download file</a>
-                </div>
-            }
+            <form className={s.searchWrapper} onSubmit={handleSearch}>
+              <span className={`icon ${s.searchIcon}`}>search</span>
+              <input
+                className={s.searchInput}
+                type="text"
+                placeholder="Search records or providers..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+              />
+            </form>
           </div>
-        </div>
-      )}
-
-      <div style={{maxWidth:800,margin:'0 auto',padding:'32px 24px'}}>
-        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:28,flexWrap:'wrap',gap:12}}>
-          <div>
-            <h1 style={{fontSize:26,fontWeight:800,color:'#0b1c30',letterSpacing:'-0.02em'}}>Medical Records</h1>
-            <p style={{fontSize:13,color:'#64748b',marginTop:4}}>{records.length} record{records.length!==1?'s':''}</p>
-          </div>
-          <button onClick={() => fileRef.current?.click()} className="btn btn-primary" style={{fontSize:14}} disabled={uploading}>
-            {uploading
-              ? <><div className="spinner" style={{width:16,height:16,borderWidth:2}}/> Uploading...</>
-              : <><span className="icon" style={{fontSize:17}}>upload</span> Upload Record</>}
+          <button className={s.uploadBtn} onClick={handleUploadClick}>
+            <span className="icon" style={{ fontSize: 20 }}>add</span>
+            Upload New Record
           </button>
-          <input ref={fileRef} type="file" accept={ACCEPT} onChange={onFileChange} style={{display:'none'}}/>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            onChange={handleFileChange}
+            accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+          />
         </div>
 
-        {/* Drop zone */}
-        <div onDrop={onDrop} onDragOver={onDragOver} onDragLeave={onDragLeave}
-          onClick={() => !uploading && fileRef.current?.click()}
-          style={{border:`2px dashed ${dragOver?'#0ea5e9':'#e2e8f0'}`,borderRadius:12,padding:'28px 24px',textAlign:'center',marginBottom:24,background:dragOver?'#f0f9ff':'#f8fafc',cursor:'pointer',transition:'all .2s'}}>
-          {uploading
-            ? <><div className="spinner" style={{margin:'0 auto 10px'}}/><p style={{color:'#64748b',fontSize:14}}>Uploading...</p></>
-            : <>
-                <span className="icon" style={{fontSize:36,color:dragOver?'#0ea5e9':'#cbd5e1',display:'block',marginBottom:8}}>cloud_upload</span>
-                <p style={{fontWeight:600,color:'#374151',fontSize:14,marginBottom:3}}>{dragOver?'Drop to upload':'Drag & drop or click to upload'}</p>
-                <p style={{fontSize:12,color:'#94a3b8'}}>PDF, JPG, PNG, DOC — max 10 MB</p>
-              </>
-          }
+        {/* ── Upload Zone ── */}
+        <div className={s.uploadZone} onClick={handleUploadClick}>
+          <div className={s.uploadZoneIcon}>
+            <span className="icon" style={{ fontSize: 32 }}>cloud_upload</span>
+          </div>
+          <h3 className={s.uploadZoneTitle}>Click or drag files to upload</h3>
+          <p className={s.uploadZoneSub}>
+            Support for PDF, JPG, PNG, and DOC. Maximum file size 15MB.
+          </p>
         </div>
 
-        {/* Records */}
-        {loading ? (
-          <div style={{display:'flex',flexDirection:'column',gap:12}}>
-            {[1,2,3].map(i => (
-              <div key={i} className="card" style={{padding:18,display:'flex',gap:14,height:76}}>
-                <div style={{width:48,height:48,borderRadius:12,background:'#f1f5f9'}}/>
-                <div style={{flex:1,display:'flex',flexDirection:'column',gap:8,paddingTop:4}}>
-                  <div style={{height:13,background:'#f1f5f9',borderRadius:6,width:'40%'}}/>
-                  <div style={{height:11,background:'#f1f5f9',borderRadius:6,width:'60%'}}/>
+        {/* ── Main Content ── */}
+        <div className={s.mainLayout}>
+          {/* ── Table ── */}
+          <div>
+            <div className={s.tableCard}>
+              {loading ? (
+                <div className={s.spinnerWrap}><div className="spinner" /></div>
+              ) : records.length === 0 ? (
+                <div className={s.emptyState}>
+                  <span className={`icon ${s.emptyIcon}`}>folder_open</span>
+                  <h3 className={s.emptyTitle}>No medical records yet</h3>
+                  <p className={s.emptyText}>
+                    Your medical history will appear here once records are added.
+                  </p>
                 </div>
+              ) : (
+                <>
+                  <div className={s.tableWrapper}>
+                    <table className={s.recordsTable}>
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Healthcare Provider</th>
+                          <th>Specialty</th>
+                          <th>Reason for Visit / Summary</th>
+                          <th style={{ textAlign: 'right' }}>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {records.map(rec => {
+                          const avatarColor = getAvatarColor(rec.providerName || rec.doctor?.name)
+                          return (
+                            <tr key={rec._id}>
+                              <td style={{ whiteSpace: 'nowrap', fontWeight: 500 }}>
+                                {new Date(rec.date || rec.createdAt).toLocaleDateString('en', {
+                                  month: 'short', day: 'numeric', year: 'numeric'
+                                })}
+                              </td>
+                              <td>
+                                <div className={s.providerCell}>
+                                  <div
+                                    className={s.providerAvatar}
+                                    style={{ background: avatarColor.bg, color: avatarColor.text }}
+                                  >
+                                    {getInitials(rec.providerName || rec.doctor?.name)}
+                                  </div>
+                                  <span className={s.providerName}>
+                                    {rec.providerName || rec.doctor?.name || 'Unknown Provider'}
+                                  </span>
+                                </div>
+                              </td>
+                              <td>
+                                <span className={`${s.recordType} ${getRecordTypeStyle(rec.type)}`}>
+                                  {getRecordTypeLabel(rec.type)}
+                                </span>
+                              </td>
+                              <td style={{ color: '#64748b' }}>
+                                {rec.summary || rec.reason || rec.description || '—'}
+                              </td>
+                              <td>
+                                <div className={s.actionCell}>
+                                  <Link
+                                    to={`/patient/records/${rec._id}`}
+                                    className={s.viewLink}
+                                  >
+                                    View Full Report
+                                  </Link>
+                                  <button className={s.moreBtn} title="More options">
+                                    <span className="icon" style={{ fontSize: 20 }}>more_vert</span>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          )
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* ── Pagination ── */}
+                  {totalPages > 1 && (
+                    <div className={s.pagination}>
+                      <span className={s.paginationInfo}>
+                        Showing {Math.min((page - 1) * limit + 1, total)}–{Math.min(page * limit, total)} of {total} records
+                      </span>
+                      <div className={s.paginationBtns}>
+                        <button
+                          className={s.pageBtn}
+                          disabled={page <= 1}
+                          onClick={() => setPage(p => Math.max(1, p - 1))}
+                        >
+                          <span className="icon" style={{ fontSize: 18 }}>chevron_left</span>
+                        </button>
+                        <button
+                          className={s.pageBtn}
+                          disabled={page >= totalPages}
+                          onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                        >
+                          <span className="icon" style={{ fontSize: 18 }}>chevron_right</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* ── Sidebar (ديناميكي من البيانات) ── */}
+          <aside className={s.sidebar}>
+            {/* Health Alerts (ثابتة حالياً) */}
+            <div className={s.alertCard}>
+              <div className={s.alertHeader}>
+                <span className="icon" style={{ fontSize: 20 }}>report</span>
+                Health Alerts
               </div>
-            ))}
-          </div>
-        ) : records.length === 0 ? (
-          <div style={{textAlign:'center',padding:'50px 24px'}}>
-            <span className="icon" style={{fontSize:52,color:'#cbd5e1',display:'block',marginBottom:12}}>folder_open</span>
-            <p style={{color:'#64748b',fontSize:15,fontWeight:600}}>No records yet</p>
-            <p style={{color:'#94a3b8',fontSize:13,marginTop:4}}>Upload your first medical document</p>
-          </div>
-        ) : (
-          <div style={{display:'flex',flexDirection:'column',gap:12}}>
-            {records.map(r => {
-              const meta = TYPE_META[r.type] || TYPE_META['other']
-              const att  = r.attachments?.[0]
-              return (
-                <div key={r._id} className="card" style={{padding:18,display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,flexWrap:'wrap'}}>
-                  <div style={{display:'flex',alignItems:'center',gap:14}}>
-                    <div style={{width:48,height:48,borderRadius:12,background:meta.bg,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
-                      <span className="icon icon-filled" style={{fontSize:24,color:meta.ic}}>{meta.icon}</span>
+              <div className={s.alertItem}>
+                <p className={s.alertTitle}>Vaccination Due</p>
+                <p className={s.alertDesc}>Tetanus booster recommended by Dec 2025.</p>
+              </div>
+            </div>
+
+            {/* Recent Labs (من السجلات) */}
+            <div className={s.sidebarCard}>
+              <h4 className={s.sidebarCardTitle}>Recent Labs</h4>
+              {recentLabs.length > 0 ? (
+                recentLabs.map((lab, i) => (
+                  <div key={lab._id || i} className={s.sidebarItem}>
+                    <div className={s.sidebarItemIcon} style={{ background: '#e0f2fe', color: '#0369a1' }}>
+                      <span className="icon" style={{ fontSize: 20 }}>science</span>
                     </div>
                     <div>
-                      <div style={{fontWeight:700,fontSize:14,color:'#0b1c30'}}>{r.title}</div>
-                      <div style={{fontSize:12,color:'#64748b',marginTop:2}}>
-                        {meta.label} · {fmtDate(r.date)}
-                      </div>
-                      <div style={{fontSize:11,color:'#94a3b8',marginTop:1}}>
-                        {r.doctor?.name || 'Uploaded by patient'}
-                        {att && ` · ${att.name}`}
-                      </div>
+                      <div className={s.sidebarItemTitle}>{lab.title || 'Lab Result'}</div>
+                      <div className={s.sidebarItemSub}>{new Date(lab.date).toLocaleDateString('en', { month: 'short', day: 'numeric' })} • Normal</div>
                     </div>
                   </div>
-                  <div style={{display:'flex',gap:8,flexShrink:0}}>
-                    {att?.url && (
-                      <button onClick={() => setPreview({ name:r.title, url:att.url, type:att.type })}
-                        className="btn btn-ghost" style={{fontSize:13,padding:'7px 12px'}}>
-                        <span className="icon" style={{fontSize:15}}>visibility</span> View
-                      </button>
-                    )}
-                    <button onClick={() => deleteRecord(r._id)}
-                      className="btn btn-danger" style={{fontSize:13,padding:'7px 12px'}}>
-                      <span className="icon" style={{fontSize:15}}>delete</span>
-                    </button>
+                ))
+              ) : (
+                <p style={{ fontSize: 13, color: '#94a3b8', textAlign: 'center', padding: '10px 0' }}>No recent labs.</p>
+              )}
+              <button className={s.sidebarAction}>View All Labs</button>
+            </div>
+
+            {/* Active Prescriptions (من السجلات) */}
+            <div className={s.sidebarCard}>
+              <h4 className={s.sidebarCardTitle}>Active Prescriptions</h4>
+              {activePrescriptions.length > 0 ? (
+                activePrescriptions.map((pres, i) => (
+                  <div key={pres._id || i} className={s.sidebarItem}>
+                    <div className={s.sidebarItemIcon} style={{ background: '#f3e8ff', color: '#7c3aed' }}>
+                      <span className="icon" style={{ fontSize: 20 }}>medication</span>
+                    </div>
+                    <div>
+                      <div className={s.sidebarItemTitle}>{pres.title || 'Prescription'}</div>
+                      <div className={s.sidebarItemSub}>{pres.description || 'No details'}</div>
+                    </div>
                   </div>
-                </div>
-              )
-            })}
-          </div>
-        )}
+                ))
+              ) : (
+                <p style={{ fontSize: 13, color: '#94a3b8', textAlign: 'center', padding: '10px 0' }}>No active prescriptions.</p>
+              )}
+              <button className={s.sidebarAction}>Manage Rx</button>
+            </div>
+          </aside>
+        </div>
       </div>
     </div>
   )
